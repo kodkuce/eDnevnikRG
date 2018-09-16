@@ -1,0 +1,514 @@
+
+
+
+<!DOCTYPE html>
+<html>
+
+
+<head>
+
+    <meta charset="utf-8">
+
+
+	<style>
+        .table th {
+            background-color: #61988e;
+            color: white;
+            text-shadow: -1px -1px 0 #000,
+            1px -1px 0 #000,
+            -1px 1px 0 #000,
+            1px 1px 0 #000;
+        }
+
+        .selected {
+            background-color: #a0b2a6;
+            border: 0px;
+        }
+
+		.editing {
+			background-color: rosybrown;
+            border: 0px;
+		}
+
+        .table {
+            border: 0px;
+            border-spacing: 0px;
+            min-width: 500px;
+            text-align: center;
+        }
+
+    </style>
+
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <script>
+
+		var selectedThing;
+
+        $(document).ready(function () {
+
+            var lastSearchText = "";
+            var selectedRow = null;
+            var numPP = $("#nPP").val();
+
+            console.log($("#nPP").val());
+
+
+			//Login check
+            $("#loginButtonBTN").click(function () {
+				console.log("Cliknuo login");
+				$("#loginButtonBTN").prop("disabled",true);
+
+                username = document.getElementById("username").value;
+				password = document.getElementById("password").value;
+                postJSON('http://0.0.0.0:5001/Skola/LoginTry', { Korisnik: username, LoginSifra: password }, ProcessLoginData);
+            });
+
+			function ProcessLoginData(recivedData) {
+				var objArray; //First we check if we recived response as json or string message
+				try {
+					alert(recivedData);
+					parsedData = JSON.parse(recivedData);
+					switch (parsedData.who){
+						case 0 :
+							alert("Neuspesan login");
+							$("#loginButtonBTN").prop("disabled",false); //ukljuci nazad dugme
+						case 1 :
+							$("#loginDiv").hide();
+							$("#ucenikDiv").show();
+							alert("Ucenik login");
+							break;
+						case 2 :
+							$("#loginDiv").hide();
+							$("#profDiv").show();
+							alert("Obican profesor login");
+							break;
+						case 3 :
+							$("#loginDiv").hide();
+							$("#adminDiv").show();
+							alert("Admin profesor login");
+							break;
+					}
+
+				} catch(e)
+				{
+					alert(e);
+					$("#loginButtonBTN").prop("disabled",false); //ukljuci nazad dugme
+					//alert(recivedData);
+					return;
+				}
+			};
+
+
+
+			$("#adminProfesoriBTN").click(function () {
+				console.log("Cliknuo prof!");
+				$("#adminIzmenaProfesora").show();
+				$("#adminIzmenaUcenika").hide();
+				$("#adminIzmenaOcena").hide();
+				$("#adminIzmenaPredmeta").hide();
+				$("#adminIzmenaOdeljenja").hide();
+				//postJSON('http://0.0.0.0:5001/Skola/AdminGovnoRadi', { TrenutnaStrana: 0, BrojPoStrani: 20 , Razred: 1 , RedniBroj: 1 , NazivUcenika: '' }, ProcessUceniciData);
+				postJSON('http://0.0.0.0:5001/Skola/AdminProfesoriIzlistaj', { TrenutnaStrana: 0, BrojPoStrani: 20  }, ProccesProfesoriData);
+			});
+
+
+			function ProccesProfesoriData(recivedData) {
+				var objArray; //First we check if we recived response as json or string message
+				try {
+					//alert(recivedData);
+					parsedData = JSON.parse(recivedData);
+
+					//console.log("tablica");
+					
+					var TablaProfesori = document.getElementById("TablaProfesori");
+
+						var tb = document.createElement("tbody"); //new tbody to swich old, basicly we use this to clear table and populate again
+
+
+						parsedData.forEach(element => {
+
+							var row = document.createElement("tr"); //Create row first
+							const keys = Object.keys(element);
+
+							for(const k in element)
+							{
+								var td = document.createElement("td");
+								
+								switch(k) {
+									case "ProfesorID":
+										var txt = document.createTextNode(element[k]); txt.disabled=true;
+										break;
+									case "Admin":
+										var txt = document.createElement("input");  txt.type="checkbox"; if((element[k])==true){ txt.checked = true;} txt.disabled = true;	
+										break;
+									default:
+										var txt = document.createElement("input"); txt.value=(element[k]); txt.disabled = true;		
+								}
+							
+								td.appendChild(txt);
+								row.appendChild(td);
+							} 
+							tb.appendChild(row); //add that row to new tbody
+
+
+						});
+
+					//nowi red za dodaj
+					var rowAddNew = document.createElement("tr");
+					var td1 = document.createElement("td"); var ID = document.createTextNode("?"); td1.appendChild(ID);rowAddNew.appendChild(td1);
+					var td2 = document.createElement("td"); var ime = document.createElement("input"); ime.id="noviProfIme"; td2.appendChild(ime);rowAddNew.appendChild(td2);
+					var td3 = document.createElement("td"); var email = document.createElement("input"); email.id="noviProfEmail"; td3.appendChild(email);rowAddNew.appendChild(td3);
+					var td4 = document.createElement("td"); var kontakt = document.createElement("input"); kontakt.id="noviProfKontakt";  td4.appendChild(kontakt);rowAddNew.appendChild(td4);
+					var td5 = document.createElement("td"); var sifra = document.createElement("input"); sifra.id="noviProfSifra";	td5.appendChild(sifra);rowAddNew.appendChild(td5);
+					var td6 = document.createElement("td"); var admin = document.createElement("input"); admin.id="noviProfAdmin"; admin.type = "checkbox";  td6.appendChild(admin);rowAddNew.appendChild(td6);
+					var td7 = document.createElement("td"); var dodaj = document.createElement("input"); dodaj.id="noviProfBTN"; dodaj.type = "button"; dodaj.value="Dodaj";  td7.appendChild(dodaj);rowAddNew.appendChild(td7);
+					
+					dodaj.addEventListener('click', function(){
+						console.log("Cliknuo da dodam novog");
+
+						if ($("#noviProfIme").val() && $("#noviProfEmail").val() && $("#noviProfKontakt").val() && $("#noviProfSifra").val() && $("#noviProfAdmin").val()) {
+							dodaj.disabled = true;
+
+							//console.log($("#noviProfIme").val());
+							var nPime = document.getElementById("noviProfIme").value;
+							var nPeml = document.getElementById("noviProfEmail").value;
+							var nPkon = document.getElementById("noviProfKontakt").value;
+							var nPsif = document.getElementById("noviProfSifra").value;
+							var nPadm = document.getElementById("noviProfAdmin").checked;
+
+
+							console.log(nPadm.value);
+
+							postJSON('http://0.0.0.0:5001/Skola/AdminProfesoriDodaj',
+								{ ImeProfesora: nPime, Email: nPeml, KontaktTelefon: nPkon, LoginSifra: nPsif, admin: nPadm }
+								, ProccesProfesoriDodavanje);
+						}else{
+							alert("Popunite sva  polja!");
+						}
+					});
+					
+					tb.appendChild(rowAddNew);
+					
+
+					TablaProfesori.replaceChild(tb, TablaProfesori.lastElementChild);
+
+
+					//head to add here too select for delete cuz evry time i generate new body it loses its click handler
+					$("table tbody tr").click(function () {
+
+						if (selectedThing == null) {
+
+							if($('td:first', this).text() == "?"){return;}//Dont alow selecting of addnewrow row
+
+							$('.selected').removeClass('selected');
+							$(this).addClass("selected");
+							selectedThing = $('td:first', this).text();
+
+							var obd = $("#obrisiDodajDiv"); obd.show();
+							$(this).append(obd);
+
+							
+							
+
+						} else if (selectedThing == ($('td:first', this).text())) { //DESELECT
+							$('.selected').removeClass('selected');
+							selectedThing = null;
+							var obd = $("#obrisiDodajDiv"); obd.hide();
+						}
+					});
+
+
+
+						$("#DelTry").click(function () {
+								if (selectedRow == null) {
+									alert("You need to click on row first");
+								} else {
+									//console.log("Selected row id is:" + $('td:first', selectedRow).text());
+									//console.log("Trying to delete whit id: " + id);
+									var id = $('td:first', selectedRow).text();
+									postJSON('/PhoneApi/DeleteRecord', id, ProcessRecivedData);										}
+									});
+
+
+
+
+					$("td").dblclick(function(){
+
+						// var editingRow = $(this).parent();
+						// //editingRow.disabled = false;
+						// editingRow.prop("contentEditable",true);
+						// editingRow.change(function () {
+						// 	console.log("aaaaaa");
+						// });
+						//editingRow.addClass("editing");
+						//$(this).focusin();
+				
+						//$(this).prop("contentEditable",true);
+						//console.log( $(this).val );
+
+						
+
+						// $(this).focusout(function () {
+						// 	$(this).parent().addClass("editing");
+						// });
+						// $(this).focusin();
+						// $(this).trigger("click");
+
+						// $(this).change(function () {
+						// 	console.log("Promeni");
+						// 	$(this).parent().addClass("editing");
+						// });
+					});
+
+
+				} catch(e)
+				{
+					alert(e);
+					return;
+				}
+			};
+
+
+			function ProccesProfesoriDodavanje(recivedData) {
+				try {
+					//alert(recivedData);
+					if(recivedData == "OK")
+					{
+						postJSON('http://0.0.0.0:5001/Skola/AdminProfesoriIzlistaj', { TrenutnaStrana: 0, BrojPoStrani: 20  }, ProccesProfesoriData);
+						//alert("Uspesno dodat!");	
+					}else{
+						alert(recivedData);
+						$("#noviProfBTN").prop("disabled",false);
+					}
+				}catch (e)
+				{
+					alert(e);
+					$("#noviProfBTN").prop("disabled",false);
+				}
+
+
+
+			
+			$("#adminUceniciBTN").click(function () {
+				console.log("Otvori ucenike!");
+				$("#adminIzmenaProfesora").hide();
+				$("#adminIzmenaUcenika").show();
+				$("#adminIzmenaOcena").hide();
+				$("#adminIzmenaPredmeta").hide();
+				$("#adminIzmenaOdeljenja").hide();
+
+				postJSON('http://0.0.0.0:5001/Skola/AdminUceniciIzlistaj', { TrenutnaStrana: 0, BrojPoStrani: 20 , Razred: 1 , RedniBroj: 1 , NazivUcenika: '' }, ProcessUceniciData);
+			});
+
+			function ProcessUceniciData(recivedData) {
+				var objArray; //First we check if we recived response as json or string message
+				try {
+					alert(recivedData);
+					parsedData = JSON.parse(recivedData);
+					
+					var myTable = document.getElementById("myTable");
+
+						var tb = document.createElement("tbody"); //new tbody to swich old, basicly we use this to clear table and populate again
+
+
+						parsedData.forEach(element => {
+
+							var row = document.createElement("tr"); //Create row first
+							const keys = Object.keys(element);
+
+							for(const k in element)
+							{
+								var td = document.createElement("td");
+								//console.log(k);
+								switch(k) {
+									case "UcenikID":
+										var txt = document.createTextNode(element[k]);
+										break;
+									case "DatumRodjenja":
+										var txt = document.createTextNode(element[k].substring(10, 0));
+										break;
+									default:
+										var txt = document.createTextNode(element[k]);
+								} 
+							
+								td.appendChild(txt);
+								row.appendChild(td);
+							} 
+							tb.appendChild(row); //add that row to new tbody
+						});
+						myTable.replaceChild(tb, myTable.lastElementChild);
+
+
+				} catch(e)
+				{
+					alert(e);
+					return;
+				}
+			}
+
+
+				//head to add here too select for delete cuz evry time i generate new body it loses its click handler
+                $("table tbody tr").click(function () {
+                    $('.selected').removeClass('selected');
+                    $(this).addClass("selected"); 
+                });
+
+				// $("tr").dblclick(function(){
+				// 	$(this).addClass("editing");
+				// });
+
+				// $("td").click(function(){
+				// 	//alert($(this).html());
+				// 	var izm = $('#izmenjivac');
+				// 	izm.show();
+				// });
+			};
+
+			
+
+
+
+
+			$("#adminOceneBTN").click(function () {
+				console.log("Cliknuo prof!");
+				$("#adminIzmenaProfesora").hide();
+				$("#adminIzmenaUcenika").hide();
+				$("#adminIzmenaOcena").show();
+				$("#adminIzmenaPredmeta").hide();
+				$("#adminIzmenaOdeljenja").hide();
+			});
+
+			$("#adminPredmetiBTN").click(function () {
+				console.log("Cliknuo prof!");
+				$("#adminIzmenaProfesora").hide();
+				$("#adminIzmenaUcenika").hide();
+				$("#adminIzmenaOcena").hide();
+				$("#adminIzmenaPredmeta").show();
+				$("#adminIzmenaOdeljenja").hide();
+			});
+
+			$("#adminOdeljenjaBTN").click(function () {
+				console.log("Cliknuo prof!");
+				$("#adminIzmenaProfesora").hide();
+				$("#adminIzmenaUcenika").hide();
+				$("#adminIzmenaOcena").hide();
+				$("#adminIzmenaPredmeta").hide();
+				$("#adminIzmenaOdeljenja").show();
+			});
+
+			
+
+
+
+
+
+            //JSON stuff 
+            function postJSON(url, data, callback) {
+                return jQuery.ajax({
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    'type': 'POST',
+                    'url': url,
+                    'data': JSON.stringify(data),
+                    'dataType': 'json',
+                    'success': callback
+                }); //Callback is what function to call if sucessful :)
+            };
+
+
+
+        });
+
+    </script>
+</head>
+
+<body>
+
+    <div id="loginDiv">
+    	<h3>Molimo vas ulogujte se</h3>
+			<input id="username" type="text" name="Korisnicko ime" placeholder="Korisnicko ime" autocomplete="off">
+			<input id="password" type="text" name="Korisnicka sifra" placeholder="Korisnicka sifra" autocomplete="off">
+			<button id="loginButtonBTN"> Login </button>
+	</div>
+
+	<div hidden id="adminDiv">
+		<div id ="adminMenu">
+			<button id="adminProfesoriBTN"> Profesori </button>
+			<button id="adminUceniciBTN"> Ucenici </button>
+			<button id="adminOceneBTN"> Ocene </button>
+			<button id="adminPredmetiBTN"> Predmeti </button>
+			<button id="adminOdeljenjaBTN"> Odeljenja </button>
+		</div>
+
+		<div id="adminIzmenaProfesora">
+			<h3>Profesori</h3>  <div id="obrisiDodajDiv" hidden> <button id="obisiProfBTN"> Obrisi</button> <button id="promeniProfBTN"> Promeni</button> </div>
+
+			<table id="TablaProfesori" class="table">
+					<thead>
+						<tr>
+							<th>ID</th> <th>Profesor</th> <th>Emajl</th> <th>Kontakt</th> <th>LoginSifra</th> <th>Admin</th>
+						</tr>
+					</thead>
+	
+					<tbody>
+	
+					</tbody>
+				</table>
+		</div>
+
+
+
+		<!-- TO DOOOOOO BY DRUGARICI -->
+
+		<div hidden id="adminIzmenaUcenika">
+			<h3>Ucenici</h3>
+			<table id="myTable" class="table">
+				<thead>
+					<tr>
+						<th>ID</th> <th>MaticniBroj</th> <th>Ime</th> <th>Prezime</th> <th>JMBG</th> <th>OdeljenjeID</th> <th>DatumRodjenja</th>
+						<th>MestoRodjenja</th><th>OpstinaRodjenja</th> <th>DrzavaRodjenja</th> <th>KontaktTelefonUcenika</th> <th>EmailUcenika</th>
+						<th>ImeOca</th> <th>PrezimeOca</th> <th>KontaktTelefonOca</th> <th>EmailOca</th> 
+						<th>ImeMajke</th> <th>PrezimeMajke</th> <th>KontaktTelefonMajke</th> <th>EmailMajke</th> <th>LoginSifra</th> 
+					</tr>
+				</thead>
+
+				<tbody>
+
+				</tbody>
+			</table>
+		</div>
+
+		<div hidden id="adminIzmenaOcena">
+			<h3>Ocene</h3>
+		</div>
+
+		<div hidden id="adminIzmenaPredmeta">
+			<h3>Predmeti</h3>
+		</div>
+		<div hidden id="adminIzmenaOdeljenja">
+			<h3>Odeljenja</h3>
+		</div>
+	</div>
+
+
+	<div hidden id="profDiv">
+		<div id="ProfIzmenaOcena">
+			<h3>Ocene</h3>
+		</div>
+	</div>
+
+	<div hidden id="ucenikDiv">
+		<div id="ListaOcena">
+			<h3>Ocene</h3>
+		</div>
+	</div>
+
+
+</body>
+
+</html>

@@ -1,0 +1,9 @@
+/home/me/Documents/Work/Skolica/eDnevnikRestart/eDnevnik-Solution/eDnevnikDLL/obj/Debug/netstandard2.0/eDnevnikDLL.csprojAssemblyReference.cache
+/home/me/Documents/Work/Skolica/eDnevnikRestart/eDnevnik-Solution/eDnevnikDLL/obj/Debug/netstandard2.0/eDnevnikDLL.csproj.CoreCompileInputs.cache
+/home/me/Documents/Work/Skolica/eDnevnikRestart/eDnevnik-Solution/eDnevnikDLL/obj/Debug/netstandard2.0/eDnevnikDLL.AssemblyInfoInputs.cache
+/home/me/Documents/Work/Skolica/eDnevnikRestart/eDnevnik-Solution/eDnevnikDLL/obj/Debug/netstandard2.0/eDnevnikDLL.AssemblyInfo.cs
+/home/me/Documents/Work/Skolica/eDnevnikRestart/eDnevnik-Solution/eDnevnikDLL/bin/Debug/netstandard2.0/eDnevnikDLL.deps.json
+/home/me/Documents/Work/Skolica/eDnevnikRestart/eDnevnik-Solution/eDnevnikDLL/bin/Debug/netstandard2.0/eDnevnikDLL.dll
+/home/me/Documents/Work/Skolica/eDnevnikRestart/eDnevnik-Solution/eDnevnikDLL/bin/Debug/netstandard2.0/eDnevnikDLL.pdb
+/home/me/Documents/Work/Skolica/eDnevnikRestart/eDnevnik-Solution/eDnevnikDLL/obj/Debug/netstandard2.0/eDnevnikDLL.dll
+/home/me/Documents/Work/Skolica/eDnevnikRestart/eDnevnik-Solution/eDnevnikDLL/obj/Debug/netstandard2.0/eDnevnikDLL.pdb

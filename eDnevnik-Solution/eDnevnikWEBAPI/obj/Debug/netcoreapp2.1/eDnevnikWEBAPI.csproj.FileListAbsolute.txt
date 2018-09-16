@@ -1,0 +1,17 @@
+/home/me/Documents/Work/Skolica/eDnevnikRestart/eDnevnik-Solution/eDnevnikWEBAPI/obj/Debug/netcoreapp2.1/eDnevnikWEBAPI.csprojAssemblyReference.cache
+/home/me/Documents/Work/Skolica/eDnevnikRestart/eDnevnik-Solution/eDnevnikWEBAPI/obj/Debug/netcoreapp2.1/eDnevnikWEBAPI.csproj.CoreCompileInputs.cache
+/home/me/Documents/Work/Skolica/eDnevnikRestart/eDnevnik-Solution/eDnevnikWEBAPI/obj/Debug/netcoreapp2.1/eDnevnikWEBAPI.RazorAssemblyInfo.cache
+/home/me/Documents/Work/Skolica/eDnevnikRestart/eDnevnik-Solution/eDnevnikWEBAPI/obj/Debug/netcoreapp2.1/eDnevnikWEBAPI.RazorAssemblyInfo.cs
+/home/me/Documents/Work/Skolica/eDnevnikRestart/eDnevnik-Solution/eDnevnikWEBAPI/obj/Debug/netcoreapp2.1/eDnevnikWEBAPI.AssemblyInfoInputs.cache
+/home/me/Documents/Work/Skolica/eDnevnikRestart/eDnevnik-Solution/eDnevnikWEBAPI/obj/Debug/netcoreapp2.1/eDnevnikWEBAPI.AssemblyInfo.cs
+/home/me/Documents/Work/Skolica/eDnevnikRestart/eDnevnik-Solution/eDnevnikWEBAPI/bin/Debug/netcoreapp2.1/eDnevnikWEBAPI.deps.json
+/home/me/Documents/Work/Skolica/eDnevnikRestart/eDnevnik-Solution/eDnevnikWEBAPI/bin/Debug/netcoreapp2.1/eDnevnikWEBAPI.runtimeconfig.json
+/home/me/Documents/Work/Skolica/eDnevnikRestart/eDnevnik-Solution/eDnevnikWEBAPI/bin/Debug/netcoreapp2.1/eDnevnikWEBAPI.runtimeconfig.dev.json
+/home/me/Documents/Work/Skolica/eDnevnikRestart/eDnevnik-Solution/eDnevnikWEBAPI/bin/Debug/netcoreapp2.1/eDnevnikWEBAPI.dll
+/home/me/Documents/Work/Skolica/eDnevnikRestart/eDnevnik-Solution/eDnevnikWEBAPI/bin/Debug/netcoreapp2.1/eDnevnikWEBAPI.pdb
+/home/me/Documents/Work/Skolica/eDnevnikRestart/eDnevnik-Solution/eDnevnikWEBAPI/obj/Debug/netcoreapp2.1/eDnevnikWEBAPI.RazorTargetAssemblyInfo.cache
+/home/me/Documents/Work/Skolica/eDnevnikRestart/eDnevnik-Solution/eDnevnikWEBAPI/obj/Debug/netcoreapp2.1/eDnevnikWEBAPI.dll
+/home/me/Documents/Work/Skolica/eDnevnikRestart/eDnevnik-Solution/eDnevnikWEBAPI/obj/Debug/netcoreapp2.1/eDnevnikWEBAPI.pdb
+/home/me/Documents/Work/Skolica/eDnevnikRestart/eDnevnik-Solution/eDnevnikWEBAPI/bin/Debug/netcoreapp2.1/eDnevnikDLL.dll
+/home/me/Documents/Work/Skolica/eDnevnikRestart/eDnevnik-Solution/eDnevnikWEBAPI/bin/Debug/netcoreapp2.1/eDnevnikDLL.pdb
+/home/me/Documents/Work/Skolica/eDnevnikRestart/eDnevnik-Solution/eDnevnikWEBAPI/obj/Debug/netcoreapp2.1/eDnevnikWEBAPI.csproj.CopyComplete
